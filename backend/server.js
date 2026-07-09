@@ -11,6 +11,7 @@ const PORT=process.env.PORT || 8080;
 
 const Lisitng=require("./models/listing")
 const ListingRouter=require("./routes/listing");
+const authRouter=require("./routes/auth");
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -19,7 +20,7 @@ app.use(cors({
     origin: "http://127.0.0.1:5500",
     credentials: true,
 }));
-
+console.log("authRouter type:", typeof authRouter);
 
 mongoose.connect(process.env.MONGO_URL).then(()=>{
         console.log("MONGO DB CONNECTED")
@@ -35,7 +36,7 @@ app.get("/",(req,res)=>{
 })
 
 app.use("/api/listings", ListingRouter);
-
+app.use("/api/auth",authRouter);
 
  app.listen(PORT ,()=>{
     console.log("Server is Listing");

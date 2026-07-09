@@ -115,7 +115,7 @@ const deleteListing = async (req, res) => {
 
 
 
-module.exports={
+module.exports = {
     getAllListings,
     getListing,
     createListing,
