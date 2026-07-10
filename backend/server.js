@@ -12,6 +12,7 @@ const PORT=process.env.PORT || 8080;
 const Lisitng=require("./models/listing")
 const ListingRouter=require("./routes/listing");
 const authRouter=require("./routes/auth");
+const reviewRouter=require("./routes/review");
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -37,6 +38,7 @@ app.get("/",(req,res)=>{
 
 app.use("/api/listings", ListingRouter);
 app.use("/api/auth",authRouter);
+app.use("/api/listings/:id/reviews",reviewRouter);
 
  app.listen(PORT ,()=>{
     console.log("Server is Listing");

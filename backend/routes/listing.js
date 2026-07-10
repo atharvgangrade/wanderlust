@@ -9,7 +9,7 @@
     } = require("../controllers/listing");
 
 
-    const { isLoggedIn } = require("../middleware/auth");
+    const {isLoggedIn} = require("../middleware/auth");
 
     router.get("/", getAllListings);
     router.get("/:id", getListing);

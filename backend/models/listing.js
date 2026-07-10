@@ -29,9 +29,13 @@ const listingSchema = new Schema({
         required: true,
     },
     owner: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     },
+    reviews: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Review",
+    }],
 }, { timestamps: true });
 
 const Listing=mongoose.model("Listing",listingSchema);

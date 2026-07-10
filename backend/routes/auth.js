@@ -7,7 +7,7 @@ const{
     getMe
 }=require("../controllers/auth");
 
-const {isLoggedIn}=require("../middleware/auth");
+const { isLoggedIn }=require("../middleware/auth");
 
 
 
