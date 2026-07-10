@@ -2,10 +2,10 @@ const Listing = require("../models/listing");
 
 const getAllListings= async(req,res)=>{
     try{
-        const listing=await Listing.find();
+        const listings=await Listing.find();
         res.json({
             success:true,
-            listing,
+            listings,
         });
     }
     catch(err)
@@ -95,7 +95,7 @@ const updateListing = async (req, res) => {
         const updatedListing = await Listing.findByIdAndUpdate(
             req.params.id,
             req.body,
-            { new: true }
+            { new: true }   
         );
 
         res.json({

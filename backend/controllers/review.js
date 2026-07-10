@@ -44,32 +44,42 @@ const deleteReview = async (req, res) => {
     try {
         const { id, reviewId } = req.params;
 
-        const review = await Review.findByIdAndDelete(reviewId);
+        const review = await Review.findById(reviewId);
 
-        if (!review) {
+        if(!review) {
             return res.status(404).json({
                 success: false,
                 message: "Review not found!",
             });
         }
 
-        await Listing.findByIdAndUpdate(id, {
-            $pull: { reviews: reviewId },
-        });
+        // Check if user is author
+        if(review.author.toString() !== req.user.userId) {
+            return res.status(403).json({
+                success: false,
+                message: "You are not authorized!",
+            });
+        }
+
+        await Review.findByIdAndDelete(reviewId);
+
+        await Listing.findByIdAndUpdate(
+            id,
+            { $pull: { reviews: reviewId } }
+        );
 
         res.json({
             success: true,
             message: "Review deleted!",
         });
 
-    } catch (err) {
+    } catch(err) {
         res.status(500).json({
             success: false,
             message: err.message,
         });
     }
 };
-
 // Get All Reviews of a Listing
 const getReviews = async (req, res) => {
     try {

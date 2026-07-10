@@ -9,16 +9,18 @@
     } = require("../controllers/listing");
 
 
-    const {isLoggedIn} = require("../middleware/auth");
+
+ const {isLoggedIn} = require("../middleware/auth");
+const { upload } = require("../config/cloudinary");
 
     router.get("/", getAllListings);
     router.get("/:id", getListing);
 
 
 
-    router.post("/", isLoggedIn, createListing);
-    router.put("/:id", isLoggedIn, updateListing);
+    router.post("/", isLoggedIn,upload.single("image"), createListing);
+    router.put("/:id", isLoggedIn,upload.single("image"), updateListing);
     router.delete("/:id", isLoggedIn, deleteListing);
 
 
-    module.exports=router;
+    module.exports=router;  
