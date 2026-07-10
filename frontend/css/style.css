@@ -1,0 +1,89 @@
+/* General */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar */
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Listing Card */
+.listing-img {
+    height: 200px;
+    object-fit: cover;
+}
+
+.card {
+    transition: transform 0.2s;
+    border: none;
+    border-radius: 10px;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+}
+
+/* Forms */
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    padding: 10px 15px;
+}
+
+.form-control:focus {
+    border-color: #212529;
+    box-shadow: 0 0 0 0.2rem rgba(33,37,41,0.15);
+}
+
+/* Buttons */
+.btn-dark {
+    border-radius: 8px;
+    padding: 10px 20px;
+}
+
+/* Auth Card */
+.card.shadow {
+    border-radius: 15px;
+    padding: 10px;
+}
+
+/* Spinner */
+.spinner-border {
+    color: #212529;
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Show page image */
+.show-img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Review card */
+.review-card {
+    border-left: 4px solid #212529;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .listing-img {
+        height: 150px;
+    }
+
+    .show-img {
+        height: 250px;
+    }
+}
