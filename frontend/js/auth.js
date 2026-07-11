@@ -1,28 +1,28 @@
-// Check auth status on page load
-const checkAuth = async () => {
-    const data = await api.get("/auth/me");
+const checkAuth = () => {
+    const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+
     const loginBtn = document.getElementById("loginBtn");
     const signupBtn = document.getElementById("signupBtn");
     const logoutBtn = document.getElementById("logoutBtn");
     const usernameEl = document.getElementById("username");
 
-    if(data.success) {
-        localStorage.setItem("user", JSON.stringify(data.user));
+    if(token && user) {
         if(loginBtn) loginBtn.classList.add("d-none");
         if(signupBtn) signupBtn.classList.add("d-none");
         if(logoutBtn) logoutBtn.classList.remove("d-none");
         if(usernameEl) {
-            usernameEl.textContent = `👤 ${data.user.username}`;
+            usernameEl.textContent = `👤 ${user.username}`;
             usernameEl.classList.remove("d-none");
         }
     } else {
-        localStorage.removeItem("user");
+        if(loginBtn) loginBtn.classList.remove("d-none");
+        if(signupBtn) signupBtn.classList.remove("d-none");
         if(logoutBtn) logoutBtn.classList.add("d-none");
         if(usernameEl) usernameEl.classList.add("d-none");
     }
 };
 
-// Login function
 const login = async () => {
     const identifier = document.getElementById("loginIdentifier").value;
     const password = document.getElementById("loginPassword").value;
@@ -41,6 +41,7 @@ const login = async () => {
     });
 
     if(data.success) {
+        localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
         window.location.href = "index.html";
     } else {
@@ -49,7 +50,6 @@ const login = async () => {
     }
 };
 
-// Signup function
 const signup = async () => {
     const username = document.getElementById("signupUsername").value;
     const email = document.getElementById("signupEmail").value;
@@ -76,14 +76,12 @@ const signup = async () => {
     }
 };
 
-// Logout function
 const logout = async () => {
-    await api.post("/auth/logout", {});
+    localStorage.removeItem("token");
     localStorage.removeItem("user");
     window.location.href = "login.html";
 };
 
-// Attach logout to button
 const logoutBtn = document.getElementById("logoutBtn");
 if(logoutBtn) {
     logoutBtn.addEventListener("click", (e) => {
@@ -92,5 +90,4 @@ if(logoutBtn) {
     });
 }
 
-// Check auth on every page
 checkAuth();

@@ -1,61 +1,69 @@
 const BASE_URL = "http://localhost:8080/api";
 
+const getToken = () => localStorage.getItem("token");
+
 const api = {
-    // GET request
     get: async (url) => {
         const response = await fetch(`${BASE_URL}${url}`, {
-            credentials: "include",
+            headers: {
+                "Authorization": `Bearer ${getToken()}`,
+            },
         });
         return response.json();
     },
 
-    // POST request
     post: async (url, data) => {
         const response = await fetch(`${BASE_URL}${url}`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${getToken()}`,
+            },
             body: JSON.stringify(data),
         });
         return response.json();
     },
 
-    // POST with form data (for image upload)
     postForm: async (url, formData) => {
         const response = await fetch(`${BASE_URL}${url}`, {
             method: "POST",
-            credentials: "include",
+            headers: {
+                "Authorization": `Bearer ${getToken()}`,
+            },
             body: formData,
         });
         return response.json();
     },
 
-    // PUT request
     put: async (url, data) => {
         const response = await fetch(`${BASE_URL}${url}`, {
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${getToken()}`,
+            },
             body: JSON.stringify(data),
         });
         return response.json();
     },
 
-    // PUT with form data
     putForm: async (url, formData) => {
         const response = await fetch(`${BASE_URL}${url}`, {
             method: "PUT",
-            credentials: "include",
+            headers: {
+                "Authorization": `Bearer ${getToken()}`,
+            },
             body: formData,
         });
         return response.json();
     },
 
-    // DELETE request
     delete: async (url) => {
         const response = await fetch(`${BASE_URL}${url}`, {
             method: "DELETE",
-            credentials: "include",
+            headers: {
+                "Authorization": `Bearer ${getToken()}`,
+            },
         });
         return response.json();
     },
