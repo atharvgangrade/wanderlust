@@ -1,49 +1,44 @@
-const User=require("../models/user");
-const bcrypt=require("bcryptjs");
-const jwt=require("jsonwebtoken");
+const User = require("../models/user");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
+// REGISTER
+const register = async (req, res) => {
+    try {
+        const { username, email, password } = req.body;
 
-
-const register= async(req,res)=>{
-    try{
-        const{username,email,password}=req.body;
-        
-        const existingUser= await User.findOne({
-            $or:[{email},{username}],
+        const existingUser = await User.findOne({
+            $or: [{ email }, { username }],
         });
-        if(existingUser)
-        {
+        if(existingUser) {
             return res.status(409).json({
-                success:false,
-                message:"User Already Exist!",
-            })
+                success: false,
+                message: "User Already Exists!",
+            });
         }
 
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-        const HashedPassword=await bcrypt.hash(password,10);
-
-        const user=await User.create({
-                username,
-                email,
-                password:HashedPassword,
+        await User.create({
+            username,
+            email,
+            password: hashedPassword,
         });
 
         res.status(201).json({
-            success:true,
-            message:"Registration Successfull !",
+            success: true,
+            message: "Registration Successful!",
         });
 
-    }
-    catch (err){
+    } catch(err) {
         res.status(500).json({
-            success:false,
-        });s
-
+            success: false,
+            message: err.message,
+        });
     }
-}
+};
 
-
-
+// LOGIN
 const login = async (req, res) => {
     try {
         const { username, email, password } = req.body;
@@ -76,10 +71,14 @@ const login = async (req, res) => {
             { expiresIn: "7d" }
         );
 
+        res.cookie("token", token, {
+            httpOnly: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+
         res.json({
             success: true,
             message: "Login Successful!",
-            token,
             user: {
                 _id: user._id,
                 username: user.username,
@@ -94,6 +93,7 @@ const login = async (req, res) => {
         });
     }
 };
+
 // LOGOUT
 const logout = (req, res) => {
     res.cookie("token", "", {
@@ -106,7 +106,7 @@ const logout = (req, res) => {
     });
 };
 
-// GET CURRENT USER
+// GET ME
 const getMe = async (req, res) => {
     try {
         const user = await User
@@ -124,4 +124,4 @@ const getMe = async (req, res) => {
     }
 };
 
-module.exports={register,login,logout,getMe};
+module.exports = { register, login, logout, getMe };

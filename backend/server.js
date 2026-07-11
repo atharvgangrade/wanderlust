@@ -29,7 +29,9 @@ mongoose.connect(process.env.MONGO_URL)
 const listingRouter = require("./routes/listing");
 const authRouter = require("./routes/auth");
 const reviewRouter = require("./routes/review");
-
+app.get("/", (req, res) => {
+    res.redirect("/pages/index.html");
+});
 app.use("/api/listings", listingRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/listings/:id/reviews", reviewRouter);

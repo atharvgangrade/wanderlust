@@ -1,22 +1,19 @@
 const Listing = require("../models/listing");
 
-const getAllListings= async(req,res)=>{
-    try{
-        const listings=await Listing.find();
+const getAllListings = async (req, res) => {
+    try {
+        const listings = await Listing.find();
         res.json({
-            success:true,
-            listings,
+            success: true,
+            listings, 
+        });
+    } catch(err) {
+        res.status(500).json({
+            success: false,
+            message: err.message,
         });
     }
-    catch(err)
-    {
-        res.status(500).json({
-            success:false,
-        })
-    }
-
-}
-
+};
 
 const getListing= async(req,res)=>{
     try{
