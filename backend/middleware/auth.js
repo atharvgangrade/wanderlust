@@ -1,25 +1,27 @@
-const jwt =require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 
-const isLoggedIn=(req,res,next)=>{
+const isLoggedIn = (req, res, next) => {
     try {
-        const token=req.cookies.token;
-        if(!token)
-        {
-            return res.status(401).json(
-            {
-                success:false,
-                message:"Please login First ",
+        const authHeader = req.headers.authorization;
+        const token = authHeader && authHeader.split(" ")[1];
+
+        if(!token) {
+            return res.status(401).json({
+                success: false,
+                message: "Please login first!",
             });
         }
 
-        const decoded=jwt.verify(token,process.env.JWT_SECRET);
-        req.user=decoded;
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = decoded;
         next();
+
+    } catch(err) {
+        res.status(401).json({
+            success: false,
+            message: "Please login first!",
+        });
     }
-    catch(err){
-        res.status(501).json({
-            success:false,
-        })
-    }
-}
-module.exports={ isLoggedIn };
+};
+
+module.exports = { isLoggedIn };

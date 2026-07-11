@@ -37,69 +37,63 @@ const register= async(req,res)=>{
     catch (err){
         res.status(500).json({
             success:false,
-        });
+        });s
 
     }
 }
 
 
 
-const login= async(req,res)=>{
-    try{
-        const {username,email,password}=req.body;
+const login = async (req, res) => {
+    try {
+        const { username, email, password } = req.body;
 
-        const user=await User.findOne({
-            $or:[
-                {email},
-                {username},
+        const user = await User.findOne({
+            $or: [
+                { email: email },
+                { username: username },
             ]
         });
-        if(!user)
-        {
+
+        if(!user) {
             return res.status(401).json({
-                success:false,
-                message:"Invalid Crenditials",
+                success: false,
+                message: "Invalid Credentials!",
             });
         }
-        const isMatch= await bcrypt.compare(password,user.password);
-        if(!isMatch)
-        {
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if(!isMatch) {
             return res.status(401).json({
-                success:false,
-                message:"Invalid Crenditials",
-            })
+                success: false,
+                message: "Invalid Credentials!",
+            });
         }
 
-
-          const token = jwt.sign(
+        const token = jwt.sign(
             { userId: user._id },
             process.env.JWT_SECRET,
             { expiresIn: "7d" }
         );
-        res.cookie("token",token,{
-            httpOnly:true,
-            maxAge:7*24*60*60*1000,
-            sameSite:"Strict",
-        })
+
         res.json({
-            success:true,
-            message:"Login SuccessFully",
-            user:{
-                _id:user._id,
+            success: true,
+            message: "Login Successful!",
+            token,
+            user: {
+                _id: user._id,
                 username: user.username,
-                email:user.email,
+                email: user.email,
             },
-        })
+        });
 
-    }  
-    catch(err){
+    } catch(err) {
         res.status(500).json({
-                success:false,
-        })
-
+            success: false,
+            message: err.message,
+        });
     }
-}
-
+};
 // LOGOUT
 const logout = (req, res) => {
     res.cookie("token", "", {
