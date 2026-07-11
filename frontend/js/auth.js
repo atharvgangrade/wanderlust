@@ -1,23 +1,22 @@
-const checkAuth = () => {
-    const token = localStorage.getItem("token");
-    const user = JSON.parse(localStorage.getItem("user") || "null");
+const checkAuth = async () => {
+    const data = await api.get("/auth/me");
 
     const loginBtn = document.getElementById("loginBtn");
     const signupBtn = document.getElementById("signupBtn");
     const logoutBtn = document.getElementById("logoutBtn");
     const usernameEl = document.getElementById("username");
 
-    if(token && user) {
+    if(data.success) {
+        localStorage.setItem("user", JSON.stringify(data.user));
         if(loginBtn) loginBtn.classList.add("d-none");
         if(signupBtn) signupBtn.classList.add("d-none");
         if(logoutBtn) logoutBtn.classList.remove("d-none");
         if(usernameEl) {
-            usernameEl.textContent = `👤 ${user.username}`;
+            usernameEl.textContent = `👤 ${data.user.username}`;
             usernameEl.classList.remove("d-none");
         }
     } else {
-        if(loginBtn) loginBtn.classList.remove("d-none");
-        if(signupBtn) signupBtn.classList.remove("d-none");
+        localStorage.removeItem("user");
         if(logoutBtn) logoutBtn.classList.add("d-none");
         if(usernameEl) usernameEl.classList.add("d-none");
     }
@@ -41,9 +40,8 @@ const login = async () => {
     });
 
     if(data.success) {
-        localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
-        window.location.href = "index.html";
+        window.location.href = "/pages/index.html";
     } else {
         errorMsg.textContent = data.message || "Login failed!";
         errorMsg.classList.remove("d-none");
@@ -69,7 +67,7 @@ const signup = async () => {
     });
 
     if(data.success) {
-        window.location.href = "login.html";
+        window.location.href = "/pages/login.html";
     } else {
         errorMsg.textContent = data.message || "Signup failed!";
         errorMsg.classList.remove("d-none");
@@ -77,9 +75,9 @@ const signup = async () => {
 };
 
 const logout = async () => {
-    localStorage.removeItem("token");
+    await api.post("/auth/logout", {});
     localStorage.removeItem("user");
-    window.location.href = "login.html";
+    window.location.href = "/pages/login.html";
 };
 
 const logoutBtn = document.getElementById("logoutBtn");

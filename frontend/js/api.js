@@ -1,13 +1,9 @@
-const BASE_URL = "http://localhost:8080/api";
-
-const getToken = () => localStorage.getItem("token");
+const BASE_URL = "/api";
 
 const api = {
     get: async (url) => {
         const response = await fetch(`${BASE_URL}${url}`, {
-            headers: {
-                "Authorization": `Bearer ${getToken()}`,
-            },
+            credentials: "include",
         });
         return response.json();
     },
@@ -15,10 +11,8 @@ const api = {
     post: async (url, data) => {
         const response = await fetch(`${BASE_URL}${url}`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${getToken()}`,
-            },
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
             body: JSON.stringify(data),
         });
         return response.json();
@@ -27,9 +21,7 @@ const api = {
     postForm: async (url, formData) => {
         const response = await fetch(`${BASE_URL}${url}`, {
             method: "POST",
-            headers: {
-                "Authorization": `Bearer ${getToken()}`,
-            },
+            credentials: "include",
             body: formData,
         });
         return response.json();
@@ -38,10 +30,8 @@ const api = {
     put: async (url, data) => {
         const response = await fetch(`${BASE_URL}${url}`, {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${getToken()}`,
-            },
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
             body: JSON.stringify(data),
         });
         return response.json();
@@ -50,9 +40,7 @@ const api = {
     putForm: async (url, formData) => {
         const response = await fetch(`${BASE_URL}${url}`, {
             method: "PUT",
-            headers: {
-                "Authorization": `Bearer ${getToken()}`,
-            },
+            credentials: "include",
             body: formData,
         });
         return response.json();
@@ -61,9 +49,7 @@ const api = {
     delete: async (url) => {
         const response = await fetch(`${BASE_URL}${url}`, {
             method: "DELETE",
-            headers: {
-                "Authorization": `Bearer ${getToken()}`,
-            },
+            credentials: "include",
         });
         return response.json();
     },
